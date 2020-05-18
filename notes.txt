@@ -1,0 +1,19 @@
+The way it will work.
+
+User signs in
+
+from there, each view is a day
+
+day is split into breakfast, lunch, dinner and snacks
+
+to add a food, user clicks on one of the splits, and searches for food.
+
+a list of responses is return from foods.searches
+
+These are then displayed to the user, with a summary from them that describes there caloric information per 100 grams.
+
+User chooses a food, which then gives access to all of the serving sizes.
+
+user chooses their serving size, and the number of the serving size they have.
+
+In the database, food_id will be stored, serving_id will also be stored.
