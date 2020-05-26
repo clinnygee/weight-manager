@@ -8,7 +8,7 @@ const Weight = conn.define('weight', {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
     },
-    reading: {
+    weight: {
         type: Sequelize.FLOAT,
         required: true,
     },

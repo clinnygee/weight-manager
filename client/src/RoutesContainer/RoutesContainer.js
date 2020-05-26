@@ -1,0 +1,164 @@
+import React, {useState, useContext, useEffect} from 'react';
+import PropTypes from 'prop-types';
+import {Switch, Route, useHistory} from 'react-router-dom';
+import { BottomNavigation, BottomNavigationAction, Container, AppBar, Toolbar} from '@material-ui/core'
+import {makeStyles, createMuiTheme} from '@material-ui/core/styles';
+// import {FastFoodOutlinedIcon, CalendarTodayOutlinedIcon, InsertChartOutlinedIcon, SettingsApplicationsOutlinedIcon} from '@material-ui/icons';
+import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
+import FastfoodOutlinedIcon from '@material-ui/icons/FastfoodOutlined';
+import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
+import SettingsApplicationsOutlinedIcon from '@material-ui/icons/SettingsApplicationsOutlined';
+
+import {UserContext} from '../context';
+import Diary from '../Routes/Diary'
+import Settings from '../Routes/Settings';
+
+import MomentUtils from '@date-io/moment';
+import {
+    MuiPickersUtilsProvider,
+    KeyboardDatePicker,
+  } from '@material-ui/pickers';
+
+import 'moment';
+import createPalette from '@material-ui/core/styles/createPalette';
+
+const RoutesContainer = props => {
+    const context = useContext(UserContext);
+    const [awaiting, setAwaiting] = useState(true);
+
+    useEffect(() => {
+        context.getUserData().then(result => {
+            setAwaiting(false);
+        });
+    },[]);
+
+    
+    return (
+        <React.Fragment>
+            <TopBarDatePicker />
+            <Navigation />
+            <Container maxWidth='md'>
+                {awaiting ? <p>awaiting</p>: 
+                    <Switch>
+                
+                    <Route path='/trends'>
+    
+                    </Route>
+                    <Route path='/food'>
+                        
+                    </Route>
+                    <Route path='/settings'>
+                        <Settings />
+                    </Route>
+                    <Route exact path='/'>
+                        <Diary />
+                    </Route>
+                    </Switch>
+                }
+            
+            </Container>
+        </React.Fragment>
+        
+    );
+};
+
+RoutesContainer.propTypes = {
+    
+};
+
+const useStyles = makeStyles({
+    top: {
+        position: 'fixed',
+        bottom: '0',
+        background: 'inherit',
+        width: '100%',
+    }
+})
+const Navigation = props => {
+    const classes = useStyles();
+    const [value, setValue] = useState(0);
+    const history = useHistory();
+
+    function handleNavigation(newValue){
+        if(newValue === 0){
+            history.push('/');
+        } else if(newValue === 1){
+            history.push('/trends')
+        } else if(newValue === 2){
+            history.push('/food')
+        } else if(newValue === 3){
+            history.push('/settings')
+        }
+    }
+    return (
+        <BottomNavigation
+        value = {value}
+        onChange={(event, newValue) => {
+            console.log(newValue)
+            setValue(newValue);
+            handleNavigation(newValue)
+        }}
+        showLabels
+        className={classes.top}
+        color='primary'
+
+        >
+            <BottomNavigationAction label='Diary' icon={<CalendarTodayOutlinedIcon/>} />
+            <BottomNavigationAction label='Trends' icon={<InsertChartOutlinedIcon />} />
+            <BottomNavigationAction label='Food' icon={<FastfoodOutlinedIcon />} />
+            <BottomNavigationAction label='Settings' icon={<SettingsApplicationsOutlinedIcon />} />
+        </BottomNavigation>
+    )
+};
+
+const barStyles = makeStyles({
+    flexCenter:{
+        display: 'flex',
+        flexDirection:'row',
+        justifyContent:'center',
+    },
+    input: {
+        color: '#fff',
+    }
+});
+
+const muiTheme = createMuiTheme({
+    palette: createPalette({
+
+    })
+})
+
+const TopBarDatePicker = props => {
+    const classes = barStyles();
+    const [date, setDate] = useState(new Date());
+    const [dateError, setDateError] = useState(false);
+
+    const handleDateChange = date => {
+        console.log(date.format());
+        setDate(date);
+        
+    };
+    return (
+        <AppBar position='static'>
+            <Toolbar className={classes.flexCenter} variant='dense'>
+                <MuiPickersUtilsProvider utils={MomentUtils} className={classes.input}>
+                    <KeyboardDatePicker
+                        color='primary'
+                        margin="normal"
+                        id="date-picker-dialog"
+                        
+                        format="DD/MM/yyyy"
+                        value={date}
+                        onChange={handleDateChange}
+                        KeyboardButtonProps={{
+                          'aria-label': 'select date',
+                        }}
+                        className={classes.input}
+                    />
+                </MuiPickersUtilsProvider>
+            </Toolbar>
+        </AppBar>
+    )
+}
+
+export default RoutesContainer;

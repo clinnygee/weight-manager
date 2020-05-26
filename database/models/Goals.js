@@ -9,15 +9,18 @@ const Goals = conn.define('goals', {
         defaultValue: Sequelize.UUIDV4,
     },
     targetWeight: {
-        type: Sequelize.STRING,
+        type: Sequelize.FLOAT,
         required: true,
     },
-    weightLoss: {
-        type: Sequelize.BOOLEAN,
+    weightChange: {
+        type: Sequelize.ENUM({
+            values:['Gain', 'Lose', 'Maintain']
+        }),
+        defaultValue: 'Maintain',
         required: true,
     },
     change: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         required: true,
     }
 });

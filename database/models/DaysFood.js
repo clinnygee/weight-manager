@@ -11,7 +11,7 @@ const DaysFood = conn.define('daysfood', {
     date: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
-    }
+    },
 });
 
 module.exports = DaysFood;

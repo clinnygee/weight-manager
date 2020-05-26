@@ -3,6 +3,10 @@ require('dotenv').config();
 const axios = require('axios');
 const queryString = require('querystring');
 
+console.log(process.env)
+process.env.APPLICATION_ID = 89528380
+process.env.APPLICATION_KEY = '3e8691e6b8b4b736b1914da7fa0e26cc'
+
 keys = {
     app_id: process.env.APPLICATION_ID,
     app_key: process.env.APPLICATION_KEY,
@@ -11,23 +15,28 @@ keys = {
     
 };
 
-const searchByName = (foodName) => {
+const searchByName = (category, foodName) => {
     const uriFoodName = queryString.escape(foodName);
     console.log(uriFoodName);
-    const urlString = `${keys.baseUrl}?nutrition-type=logging&ingr=${uriFoodName}&app_id=${keys.app_id}&app_key=${keys.app_key}`;
+    
+    
+    const urlString = 
+    `${keys.baseUrl}?ingr=${uriFoodName}&category=${category}&app_id=${keys.app_id}&app_key=${keys.app_key}`;
 
     console.log(urlString);
 
-    axios.get(urlString).then(response => {
-        // console.log(response);
-        console.log('following is parsed-------------------------------')
-        console.log(JSON.stringify(response.data.parsed, null, 4));
-        // console.log(response.data.parsed[0].food.nutrients);
-        // console.log(response.data.parsed.)
-        console.log('following is hints ----------------');
-        console.log(JSON.stringify(response.data.hints, null, 4));
-    })
+    return axios.get(urlString)
 
 };
 
-searchByName('flour');
+// FoodId is returned by SearchByName, it is the id of the food in the edamam database.
+// The measurement array is full of Measurement URI's that are return from the food search,
+// An example of a measurement Uri is 'cup'
+
+const getFoodNutrients = (foodId, measurementArray) => {
+
+}
+
+// searchByName(`Heinz Pumpkin Soup`);
+
+module.exports = {searchByName};

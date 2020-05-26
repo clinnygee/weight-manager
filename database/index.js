@@ -8,6 +8,7 @@ const Weight = require('./models/Weight');
 const DaysFood = require('./models/DaysFood');
 const Meal = require('./models/Meal');
 const Food = require('./models/Food');
+const Settings = require('./models/Settings');
 
 // User relations
 User.hasMany(Goals);
@@ -18,6 +19,8 @@ User.hasMany(Weight);
 Weight.belongsTo(User);
 User.hasMany(DaysFood);
 DaysFood.belongsTo(User);
+User.hasOne(Settings);
+Settings.belongsTo(User);
 
 // food relations
 DaysFood.hasMany(Meal);
@@ -37,5 +40,6 @@ module.exports = {
         DaysFood,
         Meal,
         Food,
+        Settings
     }
 }

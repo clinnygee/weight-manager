@@ -18,19 +18,17 @@ const User = conn.define('user', {
         type:Sequelize.STRING,
         allowNull: false, 
     }, 
-    // profileImgUrl: {
-    //     type: Sequelize.STRING,
-    //     allowNull: false,
-    //     defaultValue: 'https://picsum.photos/100',
-    // },
-    about: {
-        type: Sequelize.STRING,
-        allowNull: true,
-        defaultValue: '',
-    },
     male: {
         type: Sequelize.BOOLEAN,
         required: true,
+    },
+    birthdate: {
+        type: Sequelize.DATE, 
+        allowNull: false,
+    },
+    email: {
+        type: Sequelize.STRING,
+        allowNull: false,
     }
 }, {
     freezeTableName: true,

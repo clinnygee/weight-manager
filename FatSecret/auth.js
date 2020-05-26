@@ -27,5 +27,6 @@ request(options, function (error, response, body) {
 
    console.log(body);
    console.log(body.access_token);
+   process.env.JWT = body.access_token;
 });
 
