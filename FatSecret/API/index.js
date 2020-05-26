@@ -2,6 +2,7 @@ var request = require("request");
 require('dotenv').config();
 const axios = require('axios');
 const queryString = require('querystring');
+const fetch = require('node-fetch')
 
 console.log(process.env)
 process.env.APPLICATION_ID = 89528380
@@ -33,10 +34,28 @@ const searchByName = (category, foodName) => {
 // The measurement array is full of Measurement URI's that are return from the food search,
 // An example of a measurement Uri is 'cup'
 
-const getFoodNutrients = (foodId, measurementArray) => {
+const getFoodNutrients = (foodId, measureUri) => {
+    const uri = `https://api.edamam.com/api/food-database/nutrients?app_id=${keys.app_id}&app_key=${keys.app_key}`
+    const ingr = {
+        ingredients: [
+            {
+                quantity: 1,
+                measureURI: measureUri ? measureUri : 'http://www.edamam.com/ontologies/edamam.owl#Measure_gram',
+                foodId: foodId,
+            }
+        ]
+    }    
+    
+    return fetch(uri, {
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(ingr)
+    })
+};
 
-}
 
-// searchByName(`Heinz Pumpkin Soup`);
 
-module.exports = {searchByName};
+module.exports = {searchByName, getFoodNutrients};

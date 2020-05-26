@@ -19,7 +19,24 @@ const SearchController ={
         })
     },
     async Measurement(req, res){
-        console.log(req.params.foodId);
+        console.log('hit measurement route');
+        console.log(req.data);
+        console.log(req.body);
+        Promise.all([
+            EdamamApi.getFoodNutrients(req.params.foodId),
+            EdamamApi.getFoodNutrients(req.params.foodId, req.body.data.uri),
+        ]).then(([gram, search]) => {
+            Promise.all([
+                gram.json(),
+                search.json()
+            ]).then(([parsedGram, parsedSearch]) => {
+                // console.log()
+                responseJson = [];
+                responseJson.push(parsedGram);
+                responseJson.push(parsedSearch);
+                res.json(responseJson);
+            })
+        })
     }
 };
 

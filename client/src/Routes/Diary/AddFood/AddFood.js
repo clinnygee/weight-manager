@@ -5,7 +5,10 @@ import {AppBar, Toolbar, IconButton,
         Typography, Container, makeStyles,
         Grid, Input, InputAdornment, TextField,
         OutlinedInput, Radio, FormControl, FormLabel,
-        RadioGroup, FormControlLabel, InputLabel, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button}
+        RadioGroup, FormControlLabel, InputLabel, Dialog, DialogTitle, 
+        DialogContent, DialogContentText, DialogActions, Button,
+        Select, MenuItem
+        }
          from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close'
 import SearchIcon from '@material-ui/icons/Search';
@@ -56,7 +59,7 @@ const AddFood = props => {
     };
 
     const handleSearchSubmit = e => {
-        searchFoodById(category, search, brand).then(res => {
+        searchFoodById(category, search).then(res => {
             console.log(res)
             setResults(cleanEdemamApiSearch(res.data.hints));
         })
@@ -153,20 +156,53 @@ function cleanEdemamApiSearch(results){
 };
 
 function FoodSubmit({closeDialog, food}){
-    // const [awaiting, setAwaiting] = useState(true);
+    const [awaiting, setAwaiting] = useState(true);
+    const [measurements, setMeasurements] = useState([]);
+    const [selectedMeasurement, setSelectedMeasurement] = useState('');
+    const [quantity, setQuantity ] = useState(1);
     console.log(food)
+    
     useEffect(() =>{
-        getFoodMeasurements(food.food.foodId).then(res => {
+        getFoodMeasurements(food.food.foodId, food.measures[0]).then(res => {
+            let tempMeasurements = cleanFoodMeasurement(res.data);
+            setMeasurements(tempMeasurements);
+            setSelectedMeasurement(tempMeasurements[0].measurement);
+            setAwaiting(false);
             console.log(res);
         })
     }, []);
+
+    function handleMeasurementChange(e){
+        setSelectedMeasurement(e.target.value)
+    }
     return(
         <Dialog open onClose={closeDialog} aria-labelledby=''>
-            <DialogTitle id='Food Submit'></DialogTitle>
+            <DialogTitle id='Food Submit'>{food.food.label}</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Select A measurement, and how many servings then submit!
+                    Select a measurement, and a quantity
                 </DialogContentText>
+                {awaiting ? null :
+                <React.Fragment>
+                <FormControl style={{width: '100%', maxWidth: '300px', justifySelf:'center'}} >
+                        <InputLabel id='measurement-change'>Measurement</InputLabel>
+                        <Select
+                            labelId='measurement-change'
+                            value={selectedMeasurement}
+                            onChange={handleMeasurementChange}
+                        >   
+                        {measurements.map(measurement => {
+                            return <MenuItem value={measurement.measurement}>{measurement.measurement}</MenuItem>
+                        })}
+                            
+                        </Select>
+                    </FormControl>
+                    <FormControl>
+                        <InputLabel id='quantity'>Quantity</InputLabel>
+                        <Input value={quantity} type='number' onChange={(e) => {setQuantity(e.target.value)}}/>
+                    </FormControl>
+                    </React.Fragment>
+                }
             </DialogContent>
             <DialogActions>
                 <Button onClick={closeDialog}>Close</Button>
@@ -174,6 +210,15 @@ function FoodSubmit({closeDialog, food}){
             </DialogActions>
         </Dialog>
     )
+};
+
+function cleanFoodMeasurement(array){
+    array.forEach(measurement => {
+        measurement.measurement = measurement.ingredients[0].parsed[0].measure;
+        measurement.weight = measurement.ingredients[0].parsed[0].retainedWeight;
+    })
+
+    return array;
 }
 
 
