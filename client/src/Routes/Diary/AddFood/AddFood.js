@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import PropTypes from 'prop-types';
 
 import {AppBar, Toolbar, IconButton,
@@ -13,7 +13,8 @@ import {AppBar, Toolbar, IconButton,
 import CloseIcon from '@material-ui/icons/Close'
 import SearchIcon from '@material-ui/icons/Search';
 
-import {searchFoodById, getFoodMeasurements} from './api';
+import {UserContext} from '../../../context';
+import {searchFoodById, getFoodMeasurements, addFood} from './api';
 import FoodTable from './FoodTable'
 
 const useStyles = makeStyles((theme) =>({
@@ -41,6 +42,11 @@ const AddFood = props => {
     const [results, setResults] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedFood, setSelectedFood] = useState(null);
+    const context = useContext(UserContext);
+
+    console.log(props);
+
+    console.log(context.selectedDate)
 
     const handleSearchChange = e => {
         
@@ -93,8 +99,10 @@ const AddFood = props => {
               </Toolbar>
             </AppBar>
             <Container maxWidth='md' py={2} className={classes.container}>
+                {/* This is the category select */}
                 <Grid container direction='column' alignContent='center'>
                     <CategorySelect value={category} handleChange={handleCategorySelect}/>
+                    {/* This is the search bar */}
                 <OutlinedInput
                     className={classes.input}
                     variant='outlined'
@@ -117,8 +125,11 @@ const AddFood = props => {
                
                 
                 <Grid container direction='column' alignContent='center'>
+                    {/* This displayes the results of the search,each search item can be clicked and it will
+                        open a dialog, which allows you to choose serving and quantity
+                    */}
                     {results ? <FoodTable results={results} openDialog={handleOpenDialog}/> : null}
-                    {openDialog ? <FoodSubmit closeDialog={handleCloseDialog} food={selectedFood}/> : null}
+                    {openDialog ? <FoodSubmit closeDialog={handleCloseDialog} food={selectedFood} meal={props.meal}/> : null}
                 </Grid>
                 </Grid>
             </Container>
@@ -147,6 +158,7 @@ const CategorySelect = props => {
 
 function cleanEdemamApiSearch(results){
 
+
     const cleanResults = results.filter(result => {
         return (result.food.nutrients.CHOCDF && result.food.nutrients.ENERC_KCAL && result.food.nutrients.FAT && result.food.nutrients.PROCNT)
     })
@@ -155,11 +167,12 @@ function cleanEdemamApiSearch(results){
 
 };
 
-function FoodSubmit({closeDialog, food}){
+function FoodSubmit({closeDialog, food, meal}){
     const [awaiting, setAwaiting] = useState(true);
     const [measurements, setMeasurements] = useState([]);
     const [selectedMeasurement, setSelectedMeasurement] = useState('');
     const [quantity, setQuantity ] = useState(1);
+    const context = useContext(UserContext);
     console.log(food)
     
     useEffect(() =>{
@@ -174,6 +187,20 @@ function FoodSubmit({closeDialog, food}){
 
     function handleMeasurementChange(e){
         setSelectedMeasurement(e.target.value)
+    };
+
+    const handleFoodSubmit = (e) => {
+        e.preventDefault();
+        const food = measurements.filter(measurement => {
+            return measurement.measurement === selectedMeasurement;
+        });
+
+        const submittableFood = {date: context.selectedDate, meal: meal,quantity: quantity, food: food[0]};
+        console.log(submittableFood)
+
+        addFood(submittableFood).then(res => {
+            console.log(res);
+        })
     }
     return(
         <Dialog open onClose={closeDialog} aria-labelledby=''>
@@ -206,7 +233,7 @@ function FoodSubmit({closeDialog, food}){
             </DialogContent>
             <DialogActions>
                 <Button onClick={closeDialog}>Close</Button>
-                <Button onClick={closeDialog}>Add Food</Button>
+                <Button onClick={handleFoodSubmit}>Add Food</Button>
             </DialogActions>
         </Dialog>
     )

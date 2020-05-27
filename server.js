@@ -16,6 +16,7 @@ const port = (8080);
 const AuthenticationRouter = require('./routes/Authentication/Authentication');
 const UserRouter = require('./routes/User/User');
 const SearchRouter = require('./routes/Search/Search');
+const FoodRouter = require('./routes/Food/Food');
 
 app.use(express.static(path.join(__dirname, '/client/build')));
 
@@ -32,6 +33,7 @@ app.use(bodyParser.json());
 app.use('/api/authentication', AuthenticationRouter);
 app.use('/api/user', UserRouter);
 app.use('/api/search', SearchRouter);
+app.use('/api/food', FoodRouter);
 
 const conn = require('./database').conn;
 

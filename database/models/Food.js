@@ -9,11 +9,29 @@ const Food = conn.define('food', {
         defaultValue: Sequelize.UUIDV4,
     },
     food_id:{
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         required: true,
     },
-    measurement_id:{
-        type: Sequelize.INTEGER,
+    quantity:{
+        type: Sequelize.FLOAT,
+        required: true,
+    },
+    measurement:{
+        type: Sequelize.STRING, 
+        
+    },
+    ENERC_KCAL:{
+        type: Sequelize.FLOAT,
+        required: true,
+    },
+    PROCNT:{
+        type: Sequelize.FLOAT,
+    },
+    FAT:{
+        type: Sequelize.FLOAT,
+    },
+    CHOCDF:{
+        type: Sequelize.FLOAT,
     }
 });
 

@@ -9,11 +9,11 @@ export const UserContext = createContext({
     authenticating: false,
     userData: {},
     getUserData: () => {},
-    
-    
+    selectedDate: Date,  
     changeAuthenticated: () => {},
     changeAuthenticating: () => {},
     handleAuthentication: () => {},
+    changeSelectedDate: ()=>{},
     
     
     
@@ -51,6 +51,11 @@ export class UserProvider extends React.Component {
             console.log(res)
             this.setState({userData: res.data});
         });
+    };
+
+    changeSelectedDate = (date) => {
+        console.log('changing selected date')
+        this.setState({selectedDate: date}, () => {console.log(this.state.selectedDate)});
     };
 
     
@@ -118,6 +123,7 @@ export class UserProvider extends React.Component {
         handleAuthentication: this.handleAuthentication,
         getUserData: this.getUserData,
         logOut: this.logOut,
+        changeSelectedDate: this.changeSelectedDate,
     }
 
     render(){

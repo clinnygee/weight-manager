@@ -12,6 +12,7 @@ import SettingsApplicationsOutlinedIcon from '@material-ui/icons/SettingsApplica
 import {UserContext} from '../context';
 import Diary from '../Routes/Diary'
 import Settings from '../Routes/Settings';
+import moment from 'moment';
 
 import MomentUtils from '@date-io/moment';
 import {
@@ -132,10 +133,17 @@ const TopBarDatePicker = props => {
     const classes = barStyles();
     const [date, setDate] = useState(new Date());
     const [dateError, setDateError] = useState(false);
+    const context = useContext(UserContext);
+
+    useEffect(() => {
+        console.log('in routes contianer use effect')
+        context.changeSelectedDate(moment().format('DD/MM/yyyy'));
+    },[])
 
     const handleDateChange = date => {
         console.log(date.format());
         setDate(date);
+        context.changeSelectedDate(date.format('DD/MM/yyyy'));
         
     };
     return (

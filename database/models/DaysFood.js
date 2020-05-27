@@ -9,8 +9,8 @@ const DaysFood = conn.define('daysfood', {
         defaultValue: Sequelize.UUIDV4,
     },
     date: {
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
+        type: Sequelize.STRING,
+        required: true,
     },
 });
 
