@@ -135,10 +135,10 @@ const TopBarDatePicker = props => {
     const [dateError, setDateError] = useState(false);
     const context = useContext(UserContext);
 
-    useEffect(() => {
-        console.log('in routes contianer use effect')
-        context.changeSelectedDate(moment().format('DD/MM/yyyy'));
-    },[])
+    // useEffect(() => {
+    //     console.log('in routes contianer use effect')
+    //     context.changeSelectedDate(moment().format('DD/MM/yyyy'));
+    // },[])
 
     const handleDateChange = date => {
         console.log(date.format());

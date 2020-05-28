@@ -7,7 +7,8 @@ import {AppBar, Toolbar, IconButton,
         OutlinedInput, Radio, FormControl, FormLabel,
         RadioGroup, FormControlLabel, InputLabel, Dialog, DialogTitle, 
         DialogContent, DialogContentText, DialogActions, Button,
-        Select, MenuItem
+        Select, MenuItem, TableContainer, Paper, Table, TableHead,
+        TableRow, TableCell, TableBody, 
         }
          from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close'
@@ -167,11 +168,15 @@ function cleanEdemamApiSearch(results){
 
 };
 
+// this is a complete fucking mess, and very confusing with the naming of variables, it works though.
+// Next time you come across this, please rename some things. god bless.
+
 function FoodSubmit({closeDialog, food, meal}){
     const [awaiting, setAwaiting] = useState(true);
     const [measurements, setMeasurements] = useState([]);
     const [selectedMeasurement, setSelectedMeasurement] = useState('');
     const [quantity, setQuantity ] = useState(1);
+    const [selectedFoodMeasurement, setSelectedFoodMeasurement] = useState({});
     const context = useContext(UserContext);
     console.log(food)
     
@@ -180,6 +185,7 @@ function FoodSubmit({closeDialog, food, meal}){
             let tempMeasurements = cleanFoodMeasurement(res.data);
             setMeasurements(tempMeasurements);
             setSelectedMeasurement(tempMeasurements[0].measurement);
+            setSelectedFoodMeasurement(tempMeasurements[0]);
             setAwaiting(false);
             console.log(res);
         })
@@ -187,15 +193,25 @@ function FoodSubmit({closeDialog, food, meal}){
 
     function handleMeasurementChange(e){
         setSelectedMeasurement(e.target.value)
+        setSelectedFoodItem(e.target.value);
+        
     };
+
+    const setSelectedFoodItem = (nameOfMeasurement) => {
+        const food = measurements.filter(measurement => {
+            return measurement.measurement === nameOfMeasurement;
+        });
+        console.log(food[0])
+        setSelectedFoodMeasurement(food[0]);
+    }
 
     const handleFoodSubmit = (e) => {
         e.preventDefault();
-        const food = measurements.filter(measurement => {
+        const foodArray = measurements.filter(measurement => {
             return measurement.measurement === selectedMeasurement;
         });
-
-        const submittableFood = {date: context.selectedDate, meal: meal,quantity: quantity, food: food[0]};
+        
+        const submittableFood = {date: context.selectedDate, meal: meal,quantity: quantity, food: foodArray[0], label: food.food.label};
         console.log(submittableFood)
 
         addFood(submittableFood).then(res => {
@@ -228,6 +244,7 @@ function FoodSubmit({closeDialog, food, meal}){
                         <InputLabel id='quantity'>Quantity</InputLabel>
                         <Input value={quantity} type='number' onChange={(e) => {setQuantity(e.target.value)}}/>
                     </FormControl>
+                    <SummaryTable food={selectedFoodMeasurement} quantity={quantity}/>
                     </React.Fragment>
                 }
             </DialogContent>
@@ -238,6 +255,40 @@ function FoodSubmit({closeDialog, food, meal}){
         </Dialog>
     )
 };
+
+const SummaryTable = ({food, quantity}) => {
+    console.log(food);
+    console.log(quantity);
+
+    return (
+        <TableContainer component={Paper}>
+          <Table  aria-label="food-table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Grams</TableCell>
+                <TableCell align="right">Calories</TableCell>
+                <TableCell align="right">Fat&nbsp;(g)</TableCell>
+                <TableCell align="right">Carbs&nbsp;(g)</TableCell>
+                <TableCell align="right">Protein&nbsp;(g)</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              
+                <TableRow  id={food.foodId}>
+                  <TableCell component="th" scope="row">
+                    {food.weight}
+                  </TableCell>
+                  <TableCell align="right">{(food.totalNutrients.ENERC_KCAL.quantity) ? (food.totalNutrients.ENERC_KCAL.quantity * quantity).toFixed(1) : null}</TableCell>
+                  <TableCell align="right">{(food.totalNutrients.FAT.quantity) ? (food.totalNutrients.FAT.quantity * quantity).toFixed(1) : null}</TableCell>
+                  <TableCell align="right">{(food.totalNutrients.CHOCDF.quantity) ? (food.totalNutrients.CHOCDF.quantity * quantity).toFixed(1):null}</TableCell>
+                  <TableCell align="right">{(food.totalNutrients.PROCNT.quantity) ? (food.totalNutrients.PROCNT.quantity * quantity).toFixed(1) : null}</TableCell>
+                </TableRow>
+              
+            </TableBody>
+          </Table>
+        </TableContainer>
+    )
+}
 
 function cleanFoodMeasurement(array){
     array.forEach(measurement => {

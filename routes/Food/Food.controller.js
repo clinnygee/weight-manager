@@ -17,6 +17,7 @@ const FoodController = {
                     console.log('-------------------------------------------')
                     console.log(req.body.data.food.totalNutrients.ENERC_KCAL);
                     Food.create({
+                        label: req.body.data.label,
                         quantity: req.body.data.quantity,
                         food_id: req.body.data.food.ingredients[0].parsed[0].foodId,
                         measurement: req.body.data.food.measurement,

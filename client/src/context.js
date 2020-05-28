@@ -1,5 +1,6 @@
 import React, {createContext} from 'react';
 import axios from './config/axios';
+import moment from 'moment';
 
 
 
@@ -8,6 +9,8 @@ export const UserContext = createContext({
     authenticated: false,
     authenticating: false,
     userData: {},
+    datesFood: {},
+    setDatesFood: () => {},
     getUserData: () => {},
     selectedDate: Date,  
     changeAuthenticated: () => {},
@@ -49,14 +52,29 @@ export class UserProvider extends React.Component {
             },
         }).then(res => {
             console.log(res)
-            this.setState({userData: res.data});
+            this.setState({userData: res.data},() => {
+                this.changeSelectedDate(moment().format('DD/MM/yyyy'));
+            });
+            
         });
     };
 
     changeSelectedDate = (date) => {
         console.log('changing selected date')
-        this.setState({selectedDate: date}, () => {console.log(this.state.selectedDate)});
+        this.setState({selectedDate: date}, () => {this.setDatesFood()});
     };
+
+    setDatesFood = () => {
+        
+        console.log(this.state.userData)
+        let foundDatesFood = this.state.userData.daysfoods.filter((daysfood => {
+            return daysfood.date === this.state.selectedDate;
+        }));
+        console.log(foundDatesFood)
+        this.setState({datesFood: foundDatesFood[0]})
+        
+        // console.log(foundDatesFood)
+    }
 
     
 
@@ -118,6 +136,8 @@ export class UserProvider extends React.Component {
         authenticated: false,
         authenticating: false,
         userData:{},
+        datesFood: {},
+        setDatesFood: this.setDatesFood,
         changeAuthenticated: this.changeAuthenticated,
         changeAuthenticating: this.changeAuthenticating,
         handleAuthentication: this.handleAuthentication,

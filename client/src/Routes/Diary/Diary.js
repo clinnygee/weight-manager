@@ -1,4 +1,4 @@
-import React, {useState, forwardRef} from 'react';
+import React, {useState, forwardRef, useContext, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import  {Grid, makeStyles, Paper, Button, Dialog, Slide, List, ListItemText, ListItem, ListItemSecondaryAction, IconButton } from '@material-ui/core';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
@@ -8,6 +8,7 @@ import AddIcon from '@material-ui/icons/Add';
 import {ResponsiveContainer, RadialBarChart, RadialBar, Legend, Tooltip} from 'recharts'
 
 import AddFood from './AddFood';
+import { UserContext } from '../../context';
 
 const useStyles = makeStyles((theme)=> ({
     root: {
@@ -103,58 +104,7 @@ const Diary = props => {
                                 </Button>
                             </Grid>
                             <Grid item container direction='column'>
-                                <List>
-                                    <ListItem className={classes.headerListItem}>
-                                        <ListItemText
-                                            primary='Breakfast'
-                                            secondary='calorie summary'
-                                        />
-                                        <ListItemSecondaryAction>
-                                            <IconButton edge='end' aria-label='add-breakfast' onClick={() => handleMealAddFoodClick('breakfast')}>
-                                                <AddIcon />
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                    <List component='div' disablePadding>
-                                        <ListItem className={classes.nestedListItem}>
-                                            <ListItemText primary='muesli'/>
-                                        </ListItem>
-                                        
-                                    </List>
-                                    <ListItem>
-                                        <ListItemText
-                                            primary='Lunch'
-                                            secondary='calorie summary'
-                                        />
-                                        <ListItemSecondaryAction>
-                                            <IconButton edge='end' aria-label='add-lunch' onClick={() => handleMealAddFoodClick('lunch')}>
-                                                <AddIcon />
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                    <ListItem>
-                                        <ListItemText
-                                            primary='Dinner'
-                                            secondary='calorie summary'
-                                        />
-                                        <ListItemSecondaryAction>
-                                            <IconButton edge='end' aria-label='add-dinner' onClick={() => handleMealAddFoodClick('dinner')}>
-                                                <AddIcon />
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                    <ListItem>
-                                        <ListItemText
-                                            primary='Snack'
-                                            secondary='calorie summary'
-                                        />
-                                        <ListItemSecondaryAction>
-                                            <IconButton edge='end' aria-label='add-snack' onClick={() => handleMealAddFoodClick('snack')}>
-                                                <AddIcon />
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                </List>
+                                <MealsList handleMealAddFoodClick={handleMealAddFoodClick}/>
                             </Grid>
                         </Grid>
                     </Paper>
@@ -165,6 +115,92 @@ const Diary = props => {
         </Grid>
     );
 };
+
+function MealsList({handleMealAddFoodClick}){
+    const context = useContext(UserContext);
+    const classes = useStyles();
+    const [breakfast, setBreakfast] = useState([]);
+    const [lunch, setLunch] = useState([]);
+    const [dinner, setDinner] = useState([]);
+    const [snacks, setSnacks] = useState([]);
+
+    useEffect(()=>{
+        // console.log(context.datesFood.meals.filter(meal => {return meal.name === breakfast}));
+        if(context.datesFood){
+        setBreakfast(context.datesFood.meals.filter(meal => {return meal.name === 'breakfast'})[0]);
+        setLunch(context.datesFood.meals.filter(meal => {return meal.name === 'lunch'})[0]);
+        setDinner(context.datesFood.meals.filter(meal => {return meal.name === 'dinner'})[0]);
+        setSnacks(context.datesFood.meals.filter(meal => {return meal.name === 'snacks'})[0]);
+        }
+    }, [context.datesFood]);
+    console.log(context.datesFood);
+    console.log(breakfast);
+    return (
+        <List>
+                <ListItem className={classes.headerListItem}>
+                    <ListItemText
+                        primary='Breakfast'
+                        secondary='calorie summary'
+                    />
+                    <ListItemSecondaryAction>
+                        <IconButton edge='end' aria-label='add-breakfast' onClick={() => handleMealAddFoodClick('breakfast')}>
+                            <AddIcon />
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                </ListItem>
+                {breakfast.food ?  
+                    breakfast.food.map(food => {
+                        return (
+                            <List component='div' disablePadding>
+                                <ListItem className={classes.nestedListItem}>
+                                    <ListItemText primary={food.label}/>
+                                </ListItem>                    
+                            </List>
+                        )
+                    }
+                }: null}
+                {/* <List component='div' disablePadding>
+                    <ListItem className={classes.nestedListItem}>
+                        <ListItemText primary='muesli'/>
+                    </ListItem>
+                    
+                </List> */}
+                <ListItem>
+                    <ListItemText
+                        primary='Lunch'
+                        secondary='calorie summary'
+                    />
+                    <ListItemSecondaryAction>
+                        <IconButton edge='end' aria-label='add-lunch' onClick={() => handleMealAddFoodClick('lunch')}>
+                            <AddIcon />
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                </ListItem>
+                <ListItem>
+                    <ListItemText
+                        primary='Dinner'
+                        secondary='calorie summary'
+                    />
+                    <ListItemSecondaryAction>
+                        <IconButton edge='end' aria-label='add-dinner' onClick={() => handleMealAddFoodClick('dinner')}>
+                            <AddIcon />
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                </ListItem>
+                <ListItem>
+                    <ListItemText
+                        primary='Snack'
+                        secondary='calorie summary'
+                    />
+                    <ListItemSecondaryAction>
+                        <IconButton edge='end' aria-label='add-snack' onClick={() => handleMealAddFoodClick('snack')}>
+                            <AddIcon />
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                </ListItem>
+        </List>
+    )
+}
 
 Diary.propTypes = {
     

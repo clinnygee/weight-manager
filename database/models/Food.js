@@ -32,6 +32,9 @@ const Food = conn.define('food', {
     },
     CHOCDF:{
         type: Sequelize.FLOAT,
+    },
+    label: {
+        type: Sequelize.STRING,
     }
 });
 

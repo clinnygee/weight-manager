@@ -1,4 +1,4 @@
-const {User, Weight, BodyMeasurement, Settings, Goals} = require('../../database').models;
+const {User, Weight, BodyMeasurement, Settings, Goals, DaysFood, Meal, Food} = require('../../database').models;
 
 const UserController ={
     all(req, res){
@@ -11,6 +11,15 @@ const UserController ={
                 model: BodyMeasurement,
             },{
                 model: Goals,
+            },
+            {
+                model: DaysFood,
+                include:[{
+                    model: Meal,
+                    include:[{
+                        model: Food,
+                    }]
+                }]
             }
 
     ]}).then(user => {
