@@ -9,6 +9,7 @@ import {ResponsiveContainer, RadialBarChart, RadialBar, Legend, Tooltip} from 'r
 
 import AddFood from './AddFood';
 import { UserContext } from '../../context';
+import DailySummaryChart from './DailySummaryChart';
 
 const useStyles = makeStyles((theme)=> ({
     root: {
@@ -42,6 +43,34 @@ const Diary = props => {
     const classes = useStyles();
     const [openAddFood, setOpenAddFood] = useState(false);
     const [selectedMeal, setSelectedMeal] = useState('');
+    
+    const context = useContext(UserContext);
+
+    // useEffect(() => {
+    //     console.log(context.datesFood)
+    //     sumCaloriesConsumed();
+    // }, [context.datesFood]);
+
+    // const sumCaloriesConsumed = () =>{
+    //     let CaloriesSum = 0;
+    //     let CarbSum = 0;
+    //     let ProteinSum = 0;
+    //     let FatSum = 0;
+
+    //     context.datesFood.meals.forEach((meal)=> {
+    //         meal.food.forEach(food => {
+    //             CaloriesSum += food.ENERC_KCAL * food.quantity;
+    //             CarbSum += food.CHOCDF * food.quantity;
+    //             ProteinSum += food.PROCNT * food.quantity;
+    //             FatSum += food.FAT * food.quantity;
+    //         })
+    //     });
+    //     console.log(CaloriesSum + 'carbs:' + CarbSum + 'Protein: ' + ProteinSum + 'FatSum: ' + FatSum);
+    //     setCaloriesConsumed(CaloriesSum);
+    //     setCarbsConsumed(CarbSum);
+    //     SetProteinConsumed(ProteinSum);
+    //     setFatConsumed(FatSum);
+    // }
 
     const handleOpenAddFood = e => {
         setOpenAddFood(true);
@@ -66,8 +95,11 @@ const Diary = props => {
                 <Grid item container xs={12} direction='row' justify='center'>
                     <Paper >
                         <Grid container direction='column' spacing={1} justify='center'>
+                            <Grid item style={{height: '150px'}}>
+                                <DailySummaryChart />
+                            </Grid>
                             <Grid container item direction='row' >
-                                <Button 
+                                {/* <Button 
                                     className={classes.button}
                                     variant='outlined'
                                     color='secondary'
@@ -76,8 +108,8 @@ const Diary = props => {
                                     onClick={handleOpenAddFood}
                                 >
                                     {/* This will make a modal that allows you to enter food */}
-                                    Add Food
-                                </Button>
+                                    {/* Add Food
+                                </Button> */} 
                                 <Dialog 
                                     fullScreen open={openAddFood} onClose={handleCloseAddFood}
                                     TransitionComponent={DialogTransition}
@@ -126,15 +158,32 @@ function MealsList({handleMealAddFoodClick}){
 
     useEffect(()=>{
         // console.log(context.datesFood.meals.filter(meal => {return meal.name === breakfast}));
+        console.log('context dates food has changed')
         if(context.datesFood){
-        setBreakfast(context.datesFood.meals.filter(meal => {return meal.name === 'breakfast'})[0]);
-        setLunch(context.datesFood.meals.filter(meal => {return meal.name === 'lunch'})[0]);
-        setDinner(context.datesFood.meals.filter(meal => {return meal.name === 'dinner'})[0]);
-        setSnacks(context.datesFood.meals.filter(meal => {return meal.name === 'snacks'})[0]);
+        setBreakfast(context.datesFood.meals.filter(meal => {return meal.name === 'breakfast'})[0] || []);
+        setLunch(context.datesFood.meals.filter(meal => {return meal.name === 'lunch'})[0] || []);
+        setDinner(context.datesFood.meals.filter(meal => {return meal.name === 'dinner'})[0] || []);
+        setSnacks(context.datesFood.meals.filter(meal => {return meal.name === 'snack'})[0] || []);
         }
     }, [context.datesFood]);
+    console.log(breakfast);
+    console.log(lunch);
+
+    const mealListRender = (meal) => {
+        console.log(meal);
+        return meal.map(food => {
+            return (
+                <List component='div' disablePadding>
+                    <ListItem className={classes.nestedListItem}>
+                        <ListItemText primary={food.label}/>
+                    </ListItem>                    
+                </List>
+            )
+        })
+    };
     console.log(context.datesFood);
     console.log(breakfast);
+    console.log(lunch)
     return (
         <List>
                 <ListItem className={classes.headerListItem}>
@@ -148,17 +197,9 @@ function MealsList({handleMealAddFoodClick}){
                         </IconButton>
                     </ListItemSecondaryAction>
                 </ListItem>
-                {breakfast.food ?  
-                    breakfast.food.map(food => {
-                        return (
-                            <List component='div' disablePadding>
-                                <ListItem className={classes.nestedListItem}>
-                                    <ListItemText primary={food.label}/>
-                                </ListItem>                    
-                            </List>
-                        )
-                    }
-                }: null}
+                {/* {breakfast ?   */}
+                    {mealListRender(breakfast.food || [])}
+                {/* : null} */}
                 {/* <List component='div' disablePadding>
                     <ListItem className={classes.nestedListItem}>
                         <ListItemText primary='muesli'/>
@@ -176,6 +217,9 @@ function MealsList({handleMealAddFoodClick}){
                         </IconButton>
                     </ListItemSecondaryAction>
                 </ListItem>
+                {/* {lunch  ?   */}
+                    {mealListRender(lunch.food || [])}
+                {/* : null} */}
                 <ListItem>
                     <ListItemText
                         primary='Dinner'
@@ -187,6 +231,9 @@ function MealsList({handleMealAddFoodClick}){
                         </IconButton>
                     </ListItemSecondaryAction>
                 </ListItem>
+                {/* {dinner  ?   */}
+                    {mealListRender(dinner.food || [])}
+                {/* : null} */}
                 <ListItem>
                     <ListItemText
                         primary='Snack'
@@ -198,6 +245,9 @@ function MealsList({handleMealAddFoodClick}){
                         </IconButton>
                     </ListItemSecondaryAction>
                 </ListItem>
+                {/* {snacks  ?   */}
+                    {mealListRender(snacks.food || [])}
+                {/* : null} */}
         </List>
     )
 }
