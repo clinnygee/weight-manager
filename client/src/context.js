@@ -10,6 +10,7 @@ export const UserContext = createContext({
     authenticating: false,
     userData: {},
     datesFood: {},
+    insertDaysFood:() => {},
     setDatesFood: () => {},
     getUserData: () => {},
     selectedDate: Date,  
@@ -59,6 +60,24 @@ export class UserProvider extends React.Component {
         });
     };
 
+    insertDaysFood = (daysfood) => {
+        console.log(this.state.userData);
+        let dataToUpdate = this.state.userData;
+        /* eslint-disable */
+        dataToUpdate.daysfoods?.forEach(daysfoods => {
+            console.log(daysfoods.id === daysfood.id);
+            if(daysfoods.id === daysfood.id){
+                daysfoods.meals = daysfood.meals;
+            };
+             
+        });
+        // When this updates, it needs to change what is displayed, currently it only changes the food that is stored.
+        console.log(dataToUpdate);
+        
+        /* eslint-enable */
+        this.setState({userData: {...dataToUpdate}},() => {this.setDatesFood();});
+    }
+
     changeSelectedDate = (date) => {
         console.log('changing selected date')
         this.setState({selectedDate: date}, () => {this.setDatesFood()});
@@ -71,7 +90,7 @@ export class UserProvider extends React.Component {
             return daysfood.date === this.state.selectedDate;
         }));
         console.log(foundDatesFood)
-        this.setState({datesFood: foundDatesFood[0]})
+        this.setState({datesFood: {...foundDatesFood[0]}})
         
         // console.log(foundDatesFood)
     }
@@ -137,6 +156,7 @@ export class UserProvider extends React.Component {
         authenticating: false,
         userData:{},
         datesFood: {},
+        insertDaysFood: this.insertDaysFood,
         setDatesFood: this.setDatesFood,
         changeAuthenticated: this.changeAuthenticated,
         changeAuthenticating: this.changeAuthenticating,

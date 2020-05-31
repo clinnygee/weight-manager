@@ -1,6 +1,6 @@
 import React, {useState, forwardRef, useContext, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import  {Grid, makeStyles, Paper, Button, Dialog, Slide, List, ListItemText, ListItem, ListItemSecondaryAction, IconButton } from '@material-ui/core';
+import  {Grid, makeStyles, Paper, Button, Dialog, Slide, List, ListItemText, ListItem, ListItemSecondaryAction, IconButton, Typography } from '@material-ui/core';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
 import SpeedIcon from '@material-ui/icons/Speed';
 import NoteIcon from '@material-ui/icons/Note';
@@ -82,7 +82,7 @@ const Diary = props => {
     };
 
     const handleMealAddFoodClick = (meal) => {
-        console.log(meal);
+        // console.log(meal);
         setSelectedMeal(meal);
         setOpenAddFood(true);
     }
@@ -95,6 +95,9 @@ const Diary = props => {
                 <Grid item container xs={12} direction='row' justify='center'>
                     <Paper >
                         <Grid container direction='column' spacing={1} justify='center'>
+                            <Typography variant='h6' style={{textAlign: 'center'}}>
+                                Kilojoule Summary
+                            </Typography>
                             <Grid item style={{height: '150px'}}>
                                 <DailySummaryChart />
                             </Grid>
@@ -166,11 +169,11 @@ function MealsList({handleMealAddFoodClick}){
         setSnacks(context.datesFood.meals.filter(meal => {return meal.name === 'snack'})[0] || []);
         }
     }, [context.datesFood]);
-    console.log(breakfast);
-    console.log(lunch);
+    // console.log(breakfast);
+    // console.log(lunch);
 
     const mealListRender = (meal) => {
-        console.log(meal);
+        // console.log(meal);
         return meal.map(food => {
             return (
                 <List component='div' disablePadding>
@@ -181,9 +184,9 @@ function MealsList({handleMealAddFoodClick}){
             )
         })
     };
-    console.log(context.datesFood);
-    console.log(breakfast);
-    console.log(lunch)
+    // console.log(context.datesFood);
+    // console.log(breakfast);
+    // console.log(lunch)
     return (
         <List>
                 <ListItem className={classes.headerListItem}>

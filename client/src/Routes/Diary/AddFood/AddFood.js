@@ -215,7 +215,9 @@ function FoodSubmit({closeDialog, food, meal}){
         console.log(submittableFood)
 
         addFood(submittableFood).then(res => {
-            console.log(res);
+            console.log(res.data);
+            context.insertDaysFood(res.data);
+            
         })
     }
     return(

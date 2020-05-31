@@ -5,8 +5,8 @@ import {
   } from 'recharts';
 
 import {UserContext} from '../../context';
-
-const COLORS = ['#00C49F', '#0088FE', '#FFBB28', '#FF8042'];
+/* eslint-disable */
+const COLORS = ['#00C49F', '#0088FE', '#FFBB28', '#FF8042', '#cc0000'];
 
 function DailySummaryChart(props) {
     const context = useContext(UserContext);
@@ -18,7 +18,7 @@ function DailySummaryChart(props) {
     const [caloriesData, setCaloriesData] = useState([]);
 
     useEffect(() => {
-        console.log(context.datesFood)
+        // console.log(context.datesFood)
         sumCaloriesConsumed();
     }, [context.datesFood]);
 
@@ -36,7 +36,7 @@ function DailySummaryChart(props) {
         let ProteinSum = 0;
         let FatSum = 0;
 
-        context.datesFood.meals.forEach((meal)=> {
+        context.datesFood?.meals?.forEach((meal)=> {
             meal.food.forEach(food => {
                 CaloriesSum += food.ENERC_KCAL * food.quantity * 4.2;
                 CarbSum += food.CHOCDF * food.quantity * 4.2;
@@ -44,14 +44,14 @@ function DailySummaryChart(props) {
                 FatSum += food.FAT * food.quantity * 4.2;
             })
         });
-        console.log(CaloriesSum + 'carbs:' + CarbSum + 'Protein: ' + ProteinSum + 'FatSum: ' + FatSum);
+        // console.log(CaloriesSum + 'carbs:' + CarbSum + 'Protein: ' + ProteinSum + 'FatSum: ' + FatSum);
         setCaloriesConsumed(CaloriesSum);
         setCarbsConsumed(CarbSum);
         SetProteinConsumed(ProteinSum);
         setFatConsumed(FatSum);
         setRemainingCalories(context.userData.setting.tdee - CaloriesSum);
     };
-    console.log(caloriesData)
+    // console.log(caloriesData)
         return (
             <ResponsiveContainer width={'100%'} height={'100%'}>
                 <PieChart>
@@ -68,7 +68,7 @@ function DailySummaryChart(props) {
 
                     >
                         {caloriesData.map((entry, index) => {
-                            return <Cell key={`calories-${entry.name}`} fill={COLORS[Math.sign(entry.value) >= 0 ? index : 3]}/>
+                            return <Cell key={`calories-${entry.name}`} fill={COLORS[Math.sign(entry.value) >= 0 ? index : 4]}/>
                         })}
                         
                     </Pie>
