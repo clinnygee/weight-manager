@@ -10,6 +10,8 @@ export const UserContext = createContext({
     authenticating: false,
     userData: {},
     datesFood: {},
+    tdei: 0,
+    setTdei: () => {},
     insertDaysFood:() => {},
     setDatesFood: () => {},
     getUserData: () => {},
@@ -54,11 +56,29 @@ export class UserProvider extends React.Component {
         }).then(res => {
             console.log(res)
             this.setState({userData: res.data},() => {
+                this.setTdei();
                 this.changeSelectedDate(moment().format('DD/MM/yyyy'));
             });
             
         });
     };
+    // tdei = total daily energy intake
+    setTdei = () => {
+        // oneKg of weight change = 37000kj
+        const oneKg = 37000;
+        console.log(this.state.userData.goals[0].change);
+        let requiredKilojouleDeviation = this.state.userData.goals[0].change !== 0 ? (oneKg * this.state.userData.goals[0].change) / 7 : 0;
+        console.log(requiredKilojouleDeviation)
+        requiredKilojouleDeviation *= this.state.userData.goals[0].weightChange === 'Lose' ? -1 : 1;
+        console.log(this.state.userData.goals[0].weightChange )
+
+        // let intake = this.state.userData.setting.tdee
+
+        console.log(requiredKilojouleDeviation);
+        this.setState({tdei: Math.floor(this.state.userData.setting.tdee + requiredKilojouleDeviation)});
+
+
+    }
 
     insertDaysFood = (daysfood) => {
         console.log(this.state.userData);
@@ -156,6 +176,8 @@ export class UserProvider extends React.Component {
         authenticating: false,
         userData:{},
         datesFood: {},
+        tdei: 0,
+        setTdei: this.setTdei,
         insertDaysFood: this.insertDaysFood,
         setDatesFood: this.setDatesFood,
         changeAuthenticated: this.changeAuthenticated,

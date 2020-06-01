@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 
 import {UserContext} from '../../context';
 
-import {Grid, Paper, TextField, FormControl, InputLabel, Input, Select, MenuItem, makeStyles} from '@material-ui/core';
+import {Grid, Paper, TextField, FormControl, InputLabel, Input, Select, MenuItem, Button, makeStyles, CircularProgress} from '@material-ui/core';
+import { updateSettings } from './api';
 
 const useStyles = makeStyles((theme) =>({
     root:{
@@ -14,6 +15,7 @@ const useStyles = makeStyles((theme) =>({
     inputContainer:{
         flexDirection: 'row',
         justifyContent:'center',
+        margin: theme.spacing(1),
     },
     form:{
         display: 'flex',
@@ -37,6 +39,7 @@ const Settings = props => {
     const [weight, setWeight] = useState(context.userData.weights[0].weight);
     const [goalWeight, setGoalWeight] = useState(context.userData.goals[0].targetWeight);
     const [rateOfChange, setRateOfChange] = useState(context.userData.goals[0].change);
+    const [awaiting, setAwaiting] = useState(false);
 
     console.log(context);
 
@@ -55,7 +58,15 @@ const Settings = props => {
         setRateOfChange(e.target.value);
     };
 
-    const handleSettingsSubmit = e => {
+    const handleSettingsSubmit = async e => {
+        setAwaiting(true);
+        const settings = {weight: weight, goalWeight: goalWeight, rateOfChange: rateOfChange};
+
+        const settingsResponse = await updateSettings(settings);
+
+        settingsResponse.status === 200 && setAwaiting(false);
+
+        console.log(await settingsResponse);
 
     };
     return (
@@ -67,11 +78,11 @@ const Settings = props => {
                             <form autoComplete='off' noValidate className={classes.form}>
                                 <FormControl className={classes.input}>
                                     <InputLabel htmlFor='weight'>Current Weight</InputLabel>
-                                    <Input id='weight' value={weight} onChange={handleWeightChange}/>
+                                    <Input id='weight' type='number' value={weight} onChange={handleWeightChange}/>
                                 </FormControl>
                                 <FormControl className={classes.input}>
                                     <InputLabel htmlFor='goal-weight'>Goal Weight</InputLabel>
-                                    <Input id='goal-weight' value={goalWeight} onChange={handleGoalWeightChange}/>
+                                    <Input id='goal-weight' type='number' value={goalWeight} onChange={handleGoalWeightChange}/>
                                 </FormControl>
                             </form>
                         </Grid>
@@ -90,8 +101,10 @@ const Settings = props => {
                             </Select>
                         </FormControl>
                         </Grid>
-                        <Grid item >
-
+                        <Grid item container className={classes.inputContainer}>
+                            <Button variant='contained' color='primary' onClick={handleSettingsSubmit}>
+                                {awaiting ? <CircularProgress variant='determinant' color='#fff'/> : 'Save'}
+                            </Button>
                         </Grid>
 
                     </Grid>

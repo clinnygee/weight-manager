@@ -22,7 +22,7 @@ const Goals = conn.define('goals', {
     change: {
         type: Sequelize.FLOAT,
         required: true,
-    }
+    },
 });
 
 

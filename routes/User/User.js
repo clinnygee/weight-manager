@@ -6,4 +6,6 @@ const UserController = require('./User.controller');
 
 router.get('', withAuth, UserController.all);
 
+router.post('/settings', withAuth, UserController.settings);
+
 module.exports = router;

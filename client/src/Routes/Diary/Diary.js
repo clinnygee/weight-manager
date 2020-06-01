@@ -1,10 +1,11 @@
 import React, {useState, forwardRef, useContext, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import  {Grid, makeStyles, Paper, Button, Dialog, Slide, List, ListItemText, ListItem, ListItemSecondaryAction, IconButton, Typography } from '@material-ui/core';
+import  {Grid, makeStyles, Paper, Button, Dialog, Slide, List, ListItemText, ListItem, ListItemSecondaryAction, IconButton, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
 import SpeedIcon from '@material-ui/icons/Speed';
 import NoteIcon from '@material-ui/icons/Note';
 import AddIcon from '@material-ui/icons/Add';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {ResponsiveContainer, RadialBarChart, RadialBar, Legend, Tooltip} from 'recharts'
 
 import AddFood from './AddFood';
@@ -46,31 +47,6 @@ const Diary = props => {
     
     const context = useContext(UserContext);
 
-    // useEffect(() => {
-    //     console.log(context.datesFood)
-    //     sumCaloriesConsumed();
-    // }, [context.datesFood]);
-
-    // const sumCaloriesConsumed = () =>{
-    //     let CaloriesSum = 0;
-    //     let CarbSum = 0;
-    //     let ProteinSum = 0;
-    //     let FatSum = 0;
-
-    //     context.datesFood.meals.forEach((meal)=> {
-    //         meal.food.forEach(food => {
-    //             CaloriesSum += food.ENERC_KCAL * food.quantity;
-    //             CarbSum += food.CHOCDF * food.quantity;
-    //             ProteinSum += food.PROCNT * food.quantity;
-    //             FatSum += food.FAT * food.quantity;
-    //         })
-    //     });
-    //     console.log(CaloriesSum + 'carbs:' + CarbSum + 'Protein: ' + ProteinSum + 'FatSum: ' + FatSum);
-    //     setCaloriesConsumed(CaloriesSum);
-    //     setCarbsConsumed(CarbSum);
-    //     SetProteinConsumed(ProteinSum);
-    //     setFatConsumed(FatSum);
-    // }
 
     const handleOpenAddFood = e => {
         setOpenAddFood(true);
@@ -94,12 +70,39 @@ const Diary = props => {
             <Grid item container xs={12} direction='column' className={classes.root} spacing={3}>
                 <Grid item container xs={12} direction='row' justify='center'>
                     <Paper >
-                        <Grid container direction='column' spacing={1} justify='center'>
-                            <Typography variant='h6' style={{textAlign: 'center'}}>
-                                Kilojoule Summary
-                            </Typography>
-                            <Grid item style={{height: '150px'}}>
-                                <DailySummaryChart />
+                        <Grid container direction='column' spacing={0} justify='center'>
+                                <ExpansionPanel>
+                                    <ExpansionPanelSummary
+                                        expandIcon={<ExpandMoreIcon />}
+                                        aria-controls="panel1a-content"
+                                        id="panel1a-header"
+                                    >
+                                        <Typography>
+                                            Kilojoule Summary
+                                        </Typography>
+                                    </ExpansionPanelSummary>
+                                    <ExpansionPanelDetails>
+                                        <Grid item style={{height: '200px', width: '100%'}}>
+                                            <DailySummaryChart />
+                                        </Grid>
+                                        
+                                    </ExpansionPanelDetails>
+                                </ExpansionPanel>
+                            <Grid item> 
+                                <ExpansionPanel>
+                                    <ExpansionPanelSummary
+                                        expandIcon={<ExpandMoreIcon />}
+                                        aria-controls="panel1a-content"
+                                        id="panel1a-header"
+                                    >
+                                        <Typography>
+                                            Macro-nutrients details
+                                        </Typography>
+                                    </ExpansionPanelSummary>
+                                    <ExpansionPanelDetails>
+                                        yeet
+                                    </ExpansionPanelDetails>
+                                </ExpansionPanel>
                             </Grid>
                             <Grid container item direction='row' >
                                 {/* <Button 

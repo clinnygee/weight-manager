@@ -19,10 +19,12 @@ function DailySummaryChart(props) {
 
     useEffect(() => {
         // console.log(context.datesFood)
+        console.log('I am being called by a change in context.datesFood')
         sumCaloriesConsumed();
     }, [context.datesFood]);
 
     useEffect(() => {
+        console.log('I am being called because remainingCalories has changed')
         setCaloriesData([{
             name: 'Consumed', value: Math.floor(caloriesConsumed),
         },{
@@ -49,7 +51,7 @@ function DailySummaryChart(props) {
         setCarbsConsumed(CarbSum);
         SetProteinConsumed(ProteinSum);
         setFatConsumed(FatSum);
-        setRemainingCalories(context.userData.setting.tdee - CaloriesSum);
+        setRemainingCalories(context.tdei - CaloriesSum);
     };
     // console.log(caloriesData)
         return (
