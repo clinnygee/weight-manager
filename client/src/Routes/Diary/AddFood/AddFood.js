@@ -130,7 +130,7 @@ const AddFood = props => {
                         open a dialog, which allows you to choose serving and quantity
                     */}
                     {results ? <FoodTable results={results} openDialog={handleOpenDialog}/> : null}
-                    {openDialog ? <FoodSubmit closeDialog={handleCloseDialog} food={selectedFood} meal={props.meal}/> : null}
+                    {openDialog ? <FoodSubmit closeDialog={handleCloseDialog} food={selectedFood} meal={props.meal} closeAddFood={props.handleClose}/> : null}
                 </Grid>
                 </Grid>
             </Container>
@@ -171,7 +171,7 @@ function cleanEdemamApiSearch(results){
 // this is a complete fucking mess, and very confusing with the naming of variables, it works though.
 // Next time you come across this, please rename some things. god bless.
 
-function FoodSubmit({closeDialog, food, meal}){
+export function FoodSubmit({closeDialog, food, meal, closeAddFood, ...props}){
     const [awaiting, setAwaiting] = useState(true);
     const [measurements, setMeasurements] = useState([]);
     const [selectedMeasurement, setSelectedMeasurement] = useState('');
@@ -203,7 +203,11 @@ function FoodSubmit({closeDialog, food, meal}){
         });
         console.log(food[0])
         setSelectedFoodMeasurement(food[0]);
-    }
+    };
+
+    const handleDeleteFood = () =>{
+
+    };
 
     const handleFoodSubmit = (e) => {
         e.preventDefault();
@@ -217,6 +221,8 @@ function FoodSubmit({closeDialog, food, meal}){
         addFood(submittableFood).then(res => {
             console.log(res.data);
             context.insertDaysFood(res.data);
+            closeDialog();
+            closeAddFood();
             
         })
     }
@@ -250,8 +256,9 @@ function FoodSubmit({closeDialog, food, meal}){
                     </React.Fragment>
                 }
             </DialogContent>
-            <DialogActions>
+            <DialogActions>                
                 <Button onClick={closeDialog}>Close</Button>
+                {props.edit ? <Button onClick={handleDeleteFood}>Delete</Button> : null}
                 <Button onClick={handleFoodSubmit}>Add Food</Button>
             </DialogActions>
         </Dialog>

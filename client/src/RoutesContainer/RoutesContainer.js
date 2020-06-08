@@ -5,13 +5,15 @@ import { BottomNavigation, BottomNavigationAction, Container, AppBar, Toolbar} f
 import {makeStyles, createMuiTheme} from '@material-ui/core/styles';
 // import {FastFoodOutlinedIcon, CalendarTodayOutlinedIcon, InsertChartOutlinedIcon, SettingsApplicationsOutlinedIcon} from '@material-ui/icons';
 import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
-import FastfoodOutlinedIcon from '@material-ui/icons/FastfoodOutlined';
+import SpeedOutlinedIcon from '@material-ui/icons/SpeedOutlined';
 import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
 import SettingsApplicationsOutlinedIcon from '@material-ui/icons/SettingsApplicationsOutlined';
 
 import {UserContext} from '../context';
 import Diary from '../Routes/Diary'
 import Settings from '../Routes/Settings';
+import Stats from '../Routes/Stats';
+import Trends from '../Routes/Trends'
 import moment from 'moment';
 
 import MomentUtils from '@date-io/moment';
@@ -38,15 +40,15 @@ const RoutesContainer = props => {
         <React.Fragment>
             <TopBarDatePicker />
             <Navigation />
-            <Container maxWidth='md'>
+            <Container maxWidth='md' >
                 {awaiting ? <p>awaiting</p>: 
                     <Switch>
                 
                     <Route path='/trends'>
-    
+                        <Trends />
                     </Route>
-                    <Route path='/food'>
-                        
+                    <Route path='/stats'>
+                        <Stats />
                     </Route>
                     <Route path='/settings'>
                         <Settings />
@@ -86,7 +88,7 @@ const Navigation = props => {
         } else if(newValue === 1){
             history.push('/trends')
         } else if(newValue === 2){
-            history.push('/food')
+            history.push('/stats')
         } else if(newValue === 3){
             history.push('/settings')
         }
@@ -106,7 +108,7 @@ const Navigation = props => {
         >
             <BottomNavigationAction label='Diary' icon={<CalendarTodayOutlinedIcon/>} />
             <BottomNavigationAction label='Trends' icon={<InsertChartOutlinedIcon />} />
-            <BottomNavigationAction label='Food' icon={<FastfoodOutlinedIcon />} />
+            <BottomNavigationAction label='Stats' icon={<SpeedOutlinedIcon />} />
             <BottomNavigationAction label='Settings' icon={<SettingsApplicationsOutlinedIcon />} />
         </BottomNavigation>
     )

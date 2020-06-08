@@ -6,6 +6,8 @@ const FoodController = require('./Food.controller');
 
 router.post('/add', withAuth, FoodController.add);
 
+router.delete('/delete', withAuth, FoodController.delete);
+
 // router.get('/:category/:foodName', withAuth, FoodController.byId);
 
 

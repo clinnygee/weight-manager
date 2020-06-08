@@ -11,6 +11,7 @@ export const UserContext = createContext({
     userData: {},
     datesFood: {},
     tdei: 0,
+    setUserData: () => {},
     setTdei: () => {},
     insertDaysFood:() => {},
     setDatesFood: () => {},
@@ -62,6 +63,12 @@ export class UserProvider extends React.Component {
             
         });
     };
+
+    setUserData = (data) => {
+        this.setState({userData: {...data}}, () => {
+            this.setTdei();
+        })
+    }
     // tdei = total daily energy intake
     setTdei = () => {
         // oneKg of weight change = 37000kj
@@ -177,6 +184,7 @@ export class UserProvider extends React.Component {
         userData:{},
         datesFood: {},
         tdei: 0,
+        setUserData: this.setUserData,
         setTdei: this.setTdei,
         insertDaysFood: this.insertDaysFood,
         setDatesFood: this.setDatesFood,

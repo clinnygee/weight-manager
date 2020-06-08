@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import  {Grid, makeStyles, Paper, Button, Dialog, Slide, List, ListItemText, ListItem, ListItemSecondaryAction, IconButton, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
 import SpeedIcon from '@material-ui/icons/Speed';
+import DeleteIcon from '@material-ui/icons/Delete'
 import NoteIcon from '@material-ui/icons/Note';
 import AddIcon from '@material-ui/icons/Add';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -11,6 +12,8 @@ import {ResponsiveContainer, RadialBarChart, RadialBar, Legend, Tooltip} from 'r
 import AddFood from './AddFood';
 import { UserContext } from '../../context';
 import DailySummaryChart from './DailySummaryChart';
+import DailyMacroSummaryChart from './DailyMacroSummaryChart';
+import { deleteFood } from './AddFood/api';
 
 const useStyles = makeStyles((theme)=> ({
     root: {
@@ -21,8 +24,8 @@ const useStyles = makeStyles((theme)=> ({
         width: '100%',
     },
     paper:{
-        height: '400px',
-        width: '100%'
+        marginTop: '20px',
+        width: '100%',
     },
     button:{
         margin: theme.spacing(1),
@@ -32,7 +35,14 @@ const useStyles = makeStyles((theme)=> ({
     },
     nestedListItem:{
         paddingLeft: theme.spacing(4),
+        paddingTop: theme.spacing(0),
+        paddingBottom: theme.spacing(0),
+        
     },
+    nestedListItemText:{
+        fontSize: '0.85rem !important',
+        maxWidth: '90%',
+    }
 }));
 
 const DialogTransition = forwardRef(function Transition(props, ref){
@@ -63,13 +73,10 @@ const Diary = props => {
         setOpenAddFood(true);
     }
     return (
-        <Grid className={classes.root} container spacing={3}>
-            {/* <Grid item xs={4}>
-                <Paper ></Paper>
-            </Grid> */}
-            <Grid item container xs={12} direction='column' className={classes.root} spacing={3}>
-                <Grid item container xs={12} direction='row' justify='center'>
-                    <Paper >
+        
+            // <Grid item container xs={12} direction='column' className={classes.root} spacing={3}>
+            //     <Grid item container xs={12} direction='row' justify='center'>
+                    <Paper className={classes.paper}>
                         <Grid container direction='column' spacing={0} justify='center'>
                                 <ExpansionPanel>
                                     <ExpansionPanelSummary
@@ -100,7 +107,9 @@ const Diary = props => {
                                         </Typography>
                                     </ExpansionPanelSummary>
                                     <ExpansionPanelDetails>
-                                        yeet
+                                        <Grid item style={{height: '200px', width: '100%'}}>
+                                            <DailyMacroSummaryChart />
+                                        </Grid>
                                     </ExpansionPanelDetails>
                                 </ExpansionPanel>
                             </Grid>
@@ -146,11 +155,11 @@ const Diary = props => {
                             </Grid>
                         </Grid>
                     </Paper>
-                </Grid>
+            //     </Grid>
                 
-            </Grid>
+            // </Grid>
 
-        </Grid>
+        
     );
 };
 
@@ -165,37 +174,64 @@ function MealsList({handleMealAddFoodClick}){
     useEffect(()=>{
         // console.log(context.datesFood.meals.filter(meal => {return meal.name === breakfast}));
         console.log('context dates food has changed')
+        console.log(context.datesFood)
         if(context.datesFood){
-        setBreakfast(context.datesFood.meals.filter(meal => {return meal.name === 'breakfast'})[0] || []);
-        setLunch(context.datesFood.meals.filter(meal => {return meal.name === 'lunch'})[0] || []);
-        setDinner(context.datesFood.meals.filter(meal => {return meal.name === 'dinner'})[0] || []);
-        setSnacks(context.datesFood.meals.filter(meal => {return meal.name === 'snack'})[0] || []);
+        setBreakfast(context.datesFood?.meals?.filter(meal => {return meal.name === 'breakfast'})[0] || []);
+        setLunch(context.datesFood?.meals?.filter(meal => {return meal.name === 'lunch'})[0] || []);
+        setDinner(context.datesFood?.meals?.filter(meal => {return meal.name === 'dinner'})[0] || []);
+        setSnacks(context.datesFood?.meals?.filter(meal => {return meal.name === 'snack'})[0] || []);
         }
     }, [context.datesFood]);
     // console.log(breakfast);
     // console.log(lunch);
+
+    const handleDeleteFood = async (food) => {
+        const response = await deleteFood(food.id, context.selectedDate);
+        console.log(response);
+        console.log(food.id);
+        console.log(context.selectedDate);
+        if(response.status===200){
+            context.insertDaysFood(response.data);
+        };
+    }
 
     const mealListRender = (meal) => {
         // console.log(meal);
         return meal.map(food => {
             return (
                 <List component='div' disablePadding>
-                    <ListItem className={classes.nestedListItem}>
-                        <ListItemText primary={food.label}/>
-                    </ListItem>                    
+                    <ListItem className={classes.nestedListItem} divider>
+                        <ListItemText primary={food.label} secondary={` KJS: ${(food.ENERC_KCAL * 4.2).toFixed(0)}`} disableTypography className={classes.nestedListItemText}/>
+                    </ListItem>
+                    <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="delete" onClick={()=>{handleDeleteFood(food)}}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>                    
                 </List>
             )
         })
     };
+
+    const sumMealKjs = (meal) => {
+        
+        let sum = 0;
+        meal.forEach((food) => {
+            console.log(food)
+            sum += food.ENERC_KCAL * 4.2
+        });
+        
+        return sum.toFixed(0);
+    }
     // console.log(context.datesFood);
     // console.log(breakfast);
     // console.log(lunch)
     return (
         <List>
-                <ListItem className={classes.headerListItem}>
+                <ListItem className={classes.headerListItem} divider>
                     <ListItemText
                         primary='Breakfast'
-                        secondary='calorie summary'
+                        secondary={sumMealKjs(breakfast.food || []) + ' Kjs'}
                     />
                     <ListItemSecondaryAction>
                         <IconButton edge='end' aria-label='add-breakfast' onClick={() => handleMealAddFoodClick('breakfast')}>
@@ -212,10 +248,10 @@ function MealsList({handleMealAddFoodClick}){
                     </ListItem>
                     
                 </List> */}
-                <ListItem>
+                <ListItem divider>
                     <ListItemText
                         primary='Lunch'
-                        secondary='calorie summary'
+                        secondary={sumMealKjs(lunch.food || []) + ' Kjs'}
                     />
                     <ListItemSecondaryAction>
                         <IconButton edge='end' aria-label='add-lunch' onClick={() => handleMealAddFoodClick('lunch')}>
@@ -226,10 +262,10 @@ function MealsList({handleMealAddFoodClick}){
                 {/* {lunch  ?   */}
                     {mealListRender(lunch.food || [])}
                 {/* : null} */}
-                <ListItem>
+                <ListItem divider>
                     <ListItemText
                         primary='Dinner'
-                        secondary='calorie summary'
+                        secondary={sumMealKjs(dinner.food || []) + ' Kjs'}
                     />
                     <ListItemSecondaryAction>
                         <IconButton edge='end' aria-label='add-dinner' onClick={() => handleMealAddFoodClick('dinner')}>
@@ -243,7 +279,7 @@ function MealsList({handleMealAddFoodClick}){
                 <ListItem>
                     <ListItemText
                         primary='Snack'
-                        secondary='calorie summary'
+                        secondary={sumMealKjs(snacks.food || []) + ' Kjs'}
                     />
                     <ListItemSecondaryAction>
                         <IconButton edge='end' aria-label='add-snack' onClick={() => handleMealAddFoodClick('snack')}>

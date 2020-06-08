@@ -17,4 +17,10 @@ const addFood = (foodMeasurementsMealAndDate) => {
     });
 }
 
-export {searchFoodById, getFoodMeasurements, addFood};
+const deleteFood = (foodId, date) => {
+    return axios.delete('/api/food/delete', {
+        data: {foodId, date}
+    });
+}
+
+export {searchFoodById, getFoodMeasurements, addFood, deleteFood};

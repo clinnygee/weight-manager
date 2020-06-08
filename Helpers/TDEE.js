@@ -53,6 +53,27 @@ function calculateAge(birthdate){
     return age;
 };
 
+function calculateBfPercent(height, neck, navel, hip){
+    // follows the navy method for calculating BF, this only works for dudes atm
+
+    const bf = (495 / (1.0324 - 0.19077 * Math.log10(navel-neck) + 0.15456 * Math.log10(height))) - 450;
+
+    return bf;
+};
+
+function calculateGoalTdei(tdee, change, changeType){
+    if(changeType === 'Maintain'){
+        return tdee;
+    }
+    const oneKg = 37000;
+        
+    let requiredKilojouleDeviation = change !== 0 ? (oneKg * change) / 7 : 0;
+        
+        requiredKilojouleDeviation *= changeType === 'Lose' ? -1 : 1;
+        
+        return tdee + requiredKilojouleDeviation;
+}
+
 // assumes 2.2g per kg of weight for protein
 // assumes per kg of weight for fat
 // the rest is carbs
@@ -73,4 +94,4 @@ function calculateMacronutrientBreakdown(energyIntake, carbPercent, fatPercent, 
 // let BMR = calculateBmr(true, 84.09, 182.88, 30);
 // console.log(calculateTdee(BMR, 'Moderately Active'));
 // console.log(calculateMacronutrientBreakdown(calculateTdee(BMR, 'Moderately Active'), .33, .33, .33))
-module.exports = {calculateBmr, calculateTdee, calculateMacronutrientBreakdown};
+module.exports = {calculateBmr, calculateTdee, calculateMacronutrientBreakdown, calculateGoalTdei};
