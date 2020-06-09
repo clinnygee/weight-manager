@@ -11,6 +11,7 @@ export const UserContext = createContext({
     userData: {},
     datesFood: {},
     tdei: 0,
+    handleLogOut: () => {},
     setUserData: () => {},
     setTdei: () => {},
     insertDaysFood:() => {},
@@ -47,6 +48,14 @@ export class UserProvider extends React.Component {
             
         }
     };
+
+    handleLogOut = async () => {
+        const logOutResponse = await axios.get('/api/authentication/logout')
+
+        if(logOutResponse.status === 200){
+            this.changeAuthenticated();
+        }
+    }
 
     getUserData = () => {
         return axios.get('/api/user',{
@@ -184,6 +193,7 @@ export class UserProvider extends React.Component {
         userData:{},
         datesFood: {},
         tdei: 0,
+        handleLogOut: this.handleLogOut,
         setUserData: this.setUserData,
         setTdei: this.setTdei,
         insertDaysFood: this.insertDaysFood,

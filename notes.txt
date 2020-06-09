@@ -17,3 +17,9 @@ User chooses a food, which then gives access to all of the serving sizes.
 user chooses their serving size, and the number of the serving size they have.
 
 In the database, food_id will be stored, serving_id will also be stored.
+
+TODO:
+
+can set a bmi goal,
+
+calculate current BMI

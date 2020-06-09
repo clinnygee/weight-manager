@@ -114,41 +114,12 @@ const Diary = props => {
                                 </ExpansionPanel>
                             </Grid>
                             <Grid container item direction='row' >
-                                {/* <Button 
-                                    className={classes.button}
-                                    variant='outlined'
-                                    color='secondary'
-                                    startIcon={<FastfoodIcon />}
-                                    size='small'
-                                    onClick={handleOpenAddFood}
-                                >
-                                    {/* This will make a modal that allows you to enter food */}
-                                    {/* Add Food
-                                </Button> */} 
                                 <Dialog 
                                     fullScreen open={openAddFood} onClose={handleCloseAddFood}
                                     TransitionComponent={DialogTransition}
                                 >
                                     <AddFood handleClose={handleCloseAddFood} meal={selectedMeal}/>
                                 </Dialog>
-                                <Button
-                                    className={classes.button}
-                                    variant='outlined'
-                                    color='secondary'
-                                    startIcon={<SpeedIcon />}
-                                    size='small'
-                                >
-                                    Add Biometric
-                                </Button>
-                                <Button
-                                    className={classes.button}
-                                    variant='outlined'
-                                    color='secondary'
-                                    startIcon={<NoteIcon />}
-                                    size='small'
-                                >
-                                    Add Note
-                                </Button>
                             </Grid>
                             <Grid item container direction='column'>
                                 <MealsList handleMealAddFoodClick={handleMealAddFoodClick}/>

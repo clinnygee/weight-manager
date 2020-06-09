@@ -9,7 +9,6 @@ import moment from 'moment';
 const useStyles = makeStyles((theme) => ({
     paper:{
         width: '100%',
-        // height: '500px',
         marginTop: '20px',
         padding: '12px',
     }
@@ -31,7 +30,7 @@ const CaloriesConsumed = () => {
                     <Line type="monotone" dataKey="Kilojoules" stroke="#8884d8" />
                 </LineChart>
             </ResponsiveContainer>
-            <Typography variant='subtitle1' align='center'>Calories Consumed</Typography>
+            <Typography variant='subtitle1' align='center'>Kilojoules Consumed</Typography>
         </Paper>
     );
 };

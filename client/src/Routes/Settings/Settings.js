@@ -97,6 +97,10 @@ const Settings = props => {
 
     const handleActivityLevelChange = (e) => {
         setActivityLevel(e.target.value)
+    };
+
+    const handleLogOut = () =>{
+        context.handleLogOut();
     }
     return (
         <Grid className={classes.root} container>
@@ -157,9 +161,12 @@ const Settings = props => {
                             </FormControl>
                         </Grid>
                         <BodyMeasureMents onMeasurementsChange={handleMeasurementsChange}/>
-                        <Grid item container className={classes.inputContainer}>
+                        <Grid item container  direction='column' spacing={3}>
                             <Button variant='contained' color='primary' onClick={handleSettingsSubmit}>
                                 {awaiting ? <CircularProgress variant='determinant' color='#fff'/> : 'Save'}
+                            </Button>
+                            <Button variant='contained' color='secondary' onClick={handleLogOut}>
+                                Logout
                             </Button>
                         </Grid>
                         

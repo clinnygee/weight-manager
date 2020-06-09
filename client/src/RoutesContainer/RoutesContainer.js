@@ -40,7 +40,7 @@ const RoutesContainer = props => {
         <React.Fragment>
             <TopBarDatePicker />
             <Navigation />
-            <Container maxWidth='md' >
+            <Container maxWidth='md' style={{marginBottom: '60px'}}>
                 {awaiting ? <p>awaiting</p>: 
                     <Switch>
                 
@@ -75,12 +75,17 @@ const useStyles = makeStyles({
         bottom: '0',
         background: 'inherit',
         width: '100%',
+        zIndex: 100,
+    },
+    zIndex:{
+        zIndex: 100,
     }
 })
 const Navigation = props => {
     const classes = useStyles();
     const [value, setValue] = useState(0);
     const history = useHistory();
+    
 
     function handleNavigation(newValue){
         if(newValue === 0){
@@ -104,7 +109,7 @@ const Navigation = props => {
         showLabels
         className={classes.top}
         color='primary'
-
+        // className={classes.zIndex}
         >
             <BottomNavigationAction label='Diary' icon={<CalendarTodayOutlinedIcon/>} />
             <BottomNavigationAction label='Trends' icon={<InsertChartOutlinedIcon />} />
