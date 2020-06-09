@@ -3,6 +3,8 @@ require('dotenv').config();
 
 let conn = null;
 
+console.log(require('dotenv').config())
+
 
 if(process.env.NODE_ENV ==='production'){
     conn = new Sequelize('postgres', process.env.USERNAME, process.env.PASSWORD, {

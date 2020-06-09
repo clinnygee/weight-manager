@@ -37,19 +37,6 @@ app.use('/api/food', FoodRouter);
 
 const conn = require('./database').conn;
 
-const { User,
-    Goals,
-    BodyMeasurement,
-    Weight,
-    DaysFood,
-    Meal,
-    Food,} = require('./database').models;
-
-// conn.sync({logging: false, force: true});
-
-// User.createUser('clinnygee', 'clinton2', 12).then(user => {
-//     console.log(user);
-// });
 
 
 app.get('/*', (req, res) => {

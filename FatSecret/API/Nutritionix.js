@@ -1,7 +1,6 @@
 const axios = require('axios');
 
-let x_app_id = '64046d49';
-let x_app_key = '7ad509e6b419c744290fb4f459f68248';
+
 
 function getFoodByName(foodName){
     axios({
