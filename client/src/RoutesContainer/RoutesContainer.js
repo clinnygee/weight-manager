@@ -1,7 +1,7 @@
 import React, {useState, useContext, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import {Switch, Route, useHistory} from 'react-router-dom';
-import { BottomNavigation, BottomNavigationAction, Container, AppBar, Toolbar} from '@material-ui/core'
+import {Switch, Route, useHistory, Redirect} from 'react-router-dom';
+import { BottomNavigation, BottomNavigationAction, Container, AppBar, Toolbar, CircularProgress} from '@material-ui/core'
 import {makeStyles, createMuiTheme} from '@material-ui/core/styles';
 // import {FastFoodOutlinedIcon, CalendarTodayOutlinedIcon, InsertChartOutlinedIcon, SettingsApplicationsOutlinedIcon} from '@material-ui/icons';
 import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
@@ -41,7 +41,7 @@ const RoutesContainer = props => {
             <TopBarDatePicker />
             <Navigation />
             <Container maxWidth='md' style={{marginBottom: '60px'}}>
-                {awaiting ? <p>awaiting</p>: 
+                {awaiting ? <CircularProgress />: 
                     <Switch>
                 
                     <Route path='/trends'>
@@ -53,8 +53,12 @@ const RoutesContainer = props => {
                     <Route path='/settings'>
                         <Settings />
                     </Route>
-                    <Route exact path='/'>
+                    <Route path='/diary'>
                         <Diary />
+                    </Route>
+                    <Route exact path='/'>
+                        <Redirect to='/diary'/>
+                        
                     </Route>
                     </Switch>
                 }

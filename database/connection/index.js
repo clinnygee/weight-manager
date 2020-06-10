@@ -19,6 +19,8 @@ if(process.env.NODE_ENV ==='production'){
         pool: {maxConnections: 5, maxIdleTime: 30},
         language: 'en'
     })
+
+    console.log(conn);
 } else {
     conn = new Sequelize(process.env.DEV_DATABASE_URL);
 }

@@ -71,11 +71,10 @@ const Diary = props => {
         // console.log(meal);
         setSelectedMeal(meal);
         setOpenAddFood(true);
-    }
+    };
+
+    console.log('rendering diary')
     return (
-        
-            // <Grid item container xs={12} direction='column' className={classes.root} spacing={3}>
-            //     <Grid item container xs={12} direction='row' justify='center'>
                     <Paper className={classes.paper}>
                         <Grid container direction='column' spacing={0} justify='center'>
                                 <ExpansionPanel>
@@ -126,9 +125,7 @@ const Diary = props => {
                             </Grid>
                         </Grid>
                     </Paper>
-            //     </Grid>
-                
-            // </Grid>
+            
 
         
     );
@@ -168,6 +165,9 @@ function MealsList({handleMealAddFoodClick}){
 
     const mealListRender = (meal) => {
         // console.log(meal);
+        if(meal.length === 0){
+            return null
+        };
         return meal.map(food => {
             return (
                 <List component='div' disablePadding>
@@ -197,6 +197,7 @@ function MealsList({handleMealAddFoodClick}){
     // console.log(context.datesFood);
     // console.log(breakfast);
     // console.log(lunch)
+    console.log('rendering meal list')
     return (
         <List>
                 <ListItem className={classes.headerListItem} divider>

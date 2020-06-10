@@ -37,7 +37,7 @@ app.use('/api/food', FoodRouter);
 
 const conn = require('./database').conn;
 
-
+conn.sync();
 
 app.get('/*', (req, res) => {
     res.sendFile(__dirname + '/client/build/index.html');
