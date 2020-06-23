@@ -21,7 +21,7 @@ It utilizes the Edamam Food Api to get food data. This data is pretty local, spe
 
 ### How can i use it?
 
-There is a live version hosted [here](3.25.111.216)
+There is a live version hosted [here](http://3.25.111.216)
 
 (This is not always up, it's hosted on AWS and i take it down for 7 days a month to reduce costs)
 
