@@ -2,6 +2,10 @@
 
 A Weight tracking app, similar to MFP
 
+![A photo of the live application](example)
+
+[example]: https://res.cloudinary.com/clinnygee/image/upload/v1592182281/103986881_585404782388164_7223331908744595873_n_jexwqj.jpg
+
 ## How does it work?
 
 You enter your weight, height, sex and activity level.
