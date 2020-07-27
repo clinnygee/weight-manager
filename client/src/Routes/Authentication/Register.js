@@ -196,7 +196,7 @@ const Register = props => {
                 </Select>
             </FormControl>
             <Button variant='contained' color='primary' m='auto' disabled={!submittable} onClick={handleRegister}>Register</Button>
-            <p>Already a member? <Link to='/'>Log In</Link></p>
+            <p>Already a member? <Link to='/app'>Log In</Link></p>
         </form>
     );
 

@@ -44,20 +44,20 @@ const RoutesContainer = props => {
                 {awaiting ? <CircularProgress />: 
                     <Switch>
                 
-                    <Route path='/trends'>
+                    <Route path='/app/trends'>
                         <Trends />
                     </Route>
-                    <Route path='/stats'>
+                    <Route path='/app/stats'>
                         <Stats />
                     </Route>
-                    <Route path='/settings'>
+                    <Route path='/app/settings'>
                         <Settings />
                     </Route>
-                    <Route path='/diary'>
+                    <Route path='/app/diary'>
                         <Diary />
                     </Route>
-                    <Route exact path='/'>
-                        <Redirect to='/diary'/>
+                    <Route exact path='/app'>
+                        <Redirect to='/app/diary'/>
                         
                     </Route>
                     </Switch>
@@ -93,13 +93,13 @@ const Navigation = props => {
 
     function handleNavigation(newValue){
         if(newValue === 0){
-            history.push('/');
+            history.push('/app');
         } else if(newValue === 1){
-            history.push('/trends')
+            history.push('/app/trends')
         } else if(newValue === 2){
-            history.push('/stats')
+            history.push('/app/stats')
         } else if(newValue === 3){
-            history.push('/settings')
+            history.push('/app/settings')
         }
     }
     return (

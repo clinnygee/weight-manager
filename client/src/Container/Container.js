@@ -9,6 +9,7 @@ const Container = props => {
     const context = useContext(UserContext);
 
     const renderView = () => {
+        
         if(context.authenticated){
             return (
                 <RoutesContainer />

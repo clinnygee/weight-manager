@@ -84,7 +84,7 @@ const LogIn = props => {
                 
             </FormControl>
     <Button variant='contained' color='primary' m='auto' disabled={!submittable} onClick={handleLogin}>{awaiting ? <CircularProgress color='ternary'/>: 'Sign in'}</Button>
-            <p>Not a member yet? <Link to='/register'>Register</Link></p>
+            <p>Not a member yet? <Link to='/app/register'>Register</Link></p>
         </form>
     );
 };

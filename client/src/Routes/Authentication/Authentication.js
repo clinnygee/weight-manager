@@ -12,10 +12,10 @@ const Authentication = props => {
         <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' height='100vh'>        
         <Switch>
             
-            <Route path='/register'>
+            <Route path='/app/register'>
                 <Register />
             </Route>
-            <Route path='/'>
+            <Route path='/app'>
                 <LogIn />
             </Route>
         </Switch>
